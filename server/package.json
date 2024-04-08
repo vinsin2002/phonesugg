@@ -1,0 +1,9 @@
+{
+  "type": "module",
+  "dependencies": {
+    "fs": "^0.0.1-security",
+    "mysql": "^2.18.1",
+    "puppeteer": "^22.4.1",
+    "sentiment": "^5.0.2"
+  }
+}

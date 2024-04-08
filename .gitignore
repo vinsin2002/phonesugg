@@ -1,0 +1,5 @@
+server/node_modules
+phonesugg/node_modules
+phonesugg/.env
+server/.vnv
+server/tmp
