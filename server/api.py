@@ -3,7 +3,8 @@ from langchain_community.chat_models import ChatOllama
 from langchain.chains import create_sql_query_chain
 from langchain_community.utilities import SQLDatabase
 from urllib.parse import quote_plus
-from langchain_core.prompts import PromptTemplate
+from langchain_core.prompts import FewShotPromptTemplate, PromptTemplate
+
 app = Flask(__name__)
 DB_HOST = "localhost"
 DB_USER = "root"
@@ -13,27 +14,33 @@ DB_PORT = 3306
 password = quote_plus(DB_PASSWORD)
 db_uri = f"mysql://{DB_USER}:{password}@{DB_HOST}:{DB_PORT}/{DB_NAME}?charset=utf8mb4"
 db = SQLDatabase.from_uri(db_uri)
-llm = ChatOllama(model="starcoder2:3b")
-template = '''
-only answer with sql syntax and nothing more give sql query in string format and nothing else.
--- Whenever asked a question, always respond with SQL syntax and nothing else.
--- Always select * or select all attributes from phonedetails table whenever any question is asked to you.
--- Then understand the question and write the WHERE clause and ORDER BY clause for necessary query.
+llm = ChatOllama(model="mistral")
 
--- Storage is associated with ROM. Higher the ROM value, higher the storage of the smartphones.
--- If not specified with the number of smartphones or phones, limit your SQL query to 10.
-Always select * from phonedetails and write the conditions as requested in question
-SELECT * -- Select all attributes
-FROM phonedetails -- From the phonedetails table
-WHERE -- Where clause (to be filled based on the question)
-ORDER BY -- Order by clause (to be filled based on the question)
-LIMIT 10; -- Limiting the query to 10 rows if not specified otherwise
+example_prompt = PromptTemplate.from_template("User input: {input}\nSQL query: {query}")
+examples = [
+    {"input": "Show phones under 15k.", "query" : "SELECT phonedetails.*, soc.* FROM phonedetails JOIN soc ON phonedetails.pid = soc.sid WHERE phonedetails.price <= 15000 LIMIT 10;"},
+    {"input": "Find phones with 5000mAh+ battery.", "query" : "SELECT phonedetails.*, soc.* FROM phonedetails JOIN soc ON phonedetails.pid = soc.sid WHERE phonedetails.battery >= 5000 LIMIT 10;"},
+    {"input": "Recommend phones with great cameras.","query": " SELECT phonedetails.*, soc.* FROM phonedetails JOIN soc ON phonedetails.pid = soc.sid ORDER BY phonedetails.RearCamera, phonedetails.FrontCamera desc LIMIT 10;"},
+    {"input": "show me smartphones with great performance and great storage in 30-50k range","query": " SELECT phonedetails.*, soc.* FROM phonedetails JOIN soc ON phonedetails.pid = soc.sid WHERE price BETWEEN 30000 AND 50000 ORDER BY perfscore DESC, ROM DESC LIMIT 10;"},
+    {"input": "phones great for gaming and has good cameras ","query": "SELECT phonedetails.*, soc.* FROM phonedetails JOIN soc ON phonedetails.pid = soc.sid ORDER BY perfscore DESC, RAM DESC, ROM DESC, FrontCamera DESC, RearCamera DESC LIMIT 10;"},
+    {"input": "Looking for phones with large storage.","query": "SELECT phonedetails.*, soc.* FROM phonedetails JOIN soc ON phonedetails.pid = soc.sid ORDER BY phonedetails.ROM DESC LIMIT 10;"},
+]
+context = db.get_context()
+table_info = context["table_info"]
 
-always limit your sql syntax to 10 if number of smartphones or rows are not specified in question
-
-'''
-prompt = PromptTemplate.from_template(template)
-chain = create_sql_query_chain(llm, db)
+top_k = 10
+  
+prompt = FewShotPromptTemplate(
+    examples=examples[:15],  
+    example_prompt=example_prompt,
+    prefix="""You are a MySQL expert. Given an input question, create a 
+    syntactically correct MySQL query to run, Only answer with SQL query and nothing else do not explain or comment the sql query. if asked for good or great of that attribute simply sort is in descending order. Unless otherwise specified, 
+    do not return more than {top_k} rows. ALways write query by selecting all attributes of phonedetails and soc table \n\nHere is the relevant table info: 
+    {table_info}\n\nBelow are a number of examples of questions and their corresponding SQL queries.""",
+    suffix="User input: {input}\nSQL query: ",
+    input_variables=["input", top_k, table_info],
+)
+chain = create_sql_query_chain(llm, db,prompt)
 @app.route('/api/query', methods=['POST'])
 def process_query():
     data = request.json

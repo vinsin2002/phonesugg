@@ -11,7 +11,7 @@ db_uri = f"mysql://root:{password}@localhost:3306/smartphones?charset=utf8mb4"
 
 # Create the SQLDatabase instance using the URI
 db = SQLDatabase.from_uri(db_uri)
-llm = ChatOllama(model="starcoder2:3b")
+llm = ChatOllama(model="starcoder2:7b")
 chain = create_sql_query_chain(llm, db)
 response = chain.invoke({"question": " show me 20 smartphones in 10k to 20k range with all numerical attribute sorted in desc in phonedetails table"})
 print(response)
