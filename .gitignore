@@ -1,3 +1,4 @@
 server/node_modules
 server/.venv
 server/tmp
+server/frontend/node_modules
