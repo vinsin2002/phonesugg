@@ -164,7 +164,7 @@ connection.connect((err) => {
   await page.goto('https://www.flipkart.com/search?sid=tyy%2C4io&p%5B%5D=facets.network_type%255B%255D%3D5G&ctx=eyJjYXJkQ29udGV4dCI6eyJhdHRyaWJ1dGVzIjp7InRpdGxlIjp7Im11bHRpVmFsdWVkQXR0cmlidXRlIjp7ImtleSI6InRpdGxlIiwiaW5mZXJlbmNlVHlwZSI6IlRJVExFIiwidmFsdWVzIjpbIlNob3AgTm93Il0sInZhbHVlVHlwZSI6Ik1VTFRJX1ZBTFVFRCJ9fX19fQ%3D%3D&otracker=clp_metro_expandable_1_5.metroExpandable.METRO_EXPANDABLE_Shop%2BNow_mobile-phones-store_92P8Y0U07S00_wp4&fm=neo%2Fmerchandising&iid=M_e7ba0063-e82c-43ac-b47b-eea4a19864c3_5.92P8Y0U07S00&ppt=hp&ppn=homepage&ssid=6yiks006uo0000001685101006655');
 
   let hasNextPage = true;
-  while (hasNextPage && pageCount < 150) {
+  while (hasNextPage && pageCount < 10) {
     await scrapeCurrentPage();
     hasNextPage = await clickNextButton();
     pageCount++;
@@ -188,7 +188,6 @@ const searchProcessorName = async (phoneName) => {
         });
         
         if (!processorName) {
-          // console.log(`Processor name not found for ${phoneName}`);
           await brow.close();
         }
     
@@ -199,47 +198,20 @@ const searchProcessorName = async (phoneName) => {
         return null;
       }
   };
-//   const searchProcessorSid = async (processorName) => {
-// const regex = /\b\d+\b/;
-// const match = processorName.match(regex);
-// const extractedValue = match ? match[0] : null
-//     return new Promise((resolve, reject) => {
-//         connection.query('SELECT sid, pname FROM soc WHERE pname LIKE ?', [`%${extractedValue}%`], (err, results) => {
-//             if (err) {
-//                 reject(err);
-//                 return;
-//             }
-//             // Iterate through results to find matching pname
-//             for (const result of results) {
-//                 resolve(result.sid); // Return sid if match found
-//                 return;
-//             }
-//             resolve(null); // Return null if no match found
-//         });
-//     });
-// };
 const searchProcessorSid = async (processorName) => {
   return new Promise((resolve, reject) => {
     if (!processorName) {
-      resolve(null); // Return null if processorName is null
+      resolve(null); 
       return;
     }
-
-    // Modify processorName and perform further processing
     let modifiedProcessorName = processorName.toLowerCase();
 const wordsToRemove = ["mediatek", "qualcomm", "5g", "mobile", "processor", "platform", "superfast", "2.6ghz", "first", "india's"];
 wordsToRemove.forEach(word => {
   modifiedProcessorName = modifiedProcessorName.replace(new RegExp('\\b' + word + '\\b', 'gi'), '');
 });
 modifiedProcessorName = modifiedProcessorName.trim();
-
-// Remove words containing 'nm', 'ghz', or "()"
 modifiedProcessorName = modifiedProcessorName.replace(/\b\w*\(.*?\)\w*\b|\b\w*nm\w*\b|\b\w*ghz\w*\b/g, '');
-
-// Replace 'x+' with 'x plus'
 modifiedProcessorName = modifiedProcessorName.replace(/(\d+)\+/g, '$1 plus');
-
-// Remove brackets and plus signs
 modifiedProcessorName = modifiedProcessorName.replace(/[\(\)]|\+/g, '');
 
 modifiedProcessorName = modifiedProcessorName.trim();
@@ -281,64 +253,106 @@ modifiedProcessorName = modifiedProcessorName.trim();
 
 
 const insertValues = async () => {
-    try {
-      for (const item of items) {
-        if (item.pname !== null) {
-          const existingEntry = await checkExistingEntry(item.pname,item.price);
-          if (!existingEntry) {
-            if(!item.ProcessorName){const processorName = await searchProcessorName(item.pname);
-                item.ProcessorName = processorName;   
-            }
-            const sid = await searchProcessorSid(item.ProcessorName);
-            if (sid !== null) {
-                // If sid found, update ProcessorName with sid
-                item.ProcessorName = sid;
-            } else {
-                // If no sid found, set ProcessorName to null
-                item.ProcessorName = null;
-            }
-            const value = [
-              item.pname,
-              item.price,
-              item.image,
-              item.RAM || null,
-              item.ROM || null,
-              item.DisplaySize || null,
-              item.DisplayType || null,
-              item.Battery || null,
-              item.ProcessorName || null,
-              item.FrontCamera || null,
-              item.RearCamera || null,
-              item.nscore || null,
-              item.numberOfRatings || null
-            ];
-            // console.log(value);
-            await insertValue(value);
+  try {
+    for (const item of items) {
+      if (item.pname !== null) {
+        const existingEntryId = await checkExistingEntry(item.pname, item.RAM, item.ROM);
+        if (existingEntryId !== null) {
+          // Update existing entry
+          const sid = await searchProcessorSid(item.ProcessorName);
+          if (sid !== null) {
+            // If sid found, update ProcessorName with sid
+            item.ProcessorName = sid;
           } else {
-            // console.log(`Skipping duplicate entry for ${item.pname}`);
+            // If no sid found, set ProcessorName to null
+            item.ProcessorName = null;
           }
+          const value = [
+            item.price,
+            item.image,
+            item.RAM || null,
+            item.ROM || null,
+            item.DisplaySize || null,
+            item.DisplayType || null,
+            item.Battery || null,
+            item.ProcessorName || null,
+            item.FrontCamera || null,
+            item.RearCamera || null,
+            item.nscore || null,
+            item.numberOfRatings || null,
+            existingEntryId
+          ];
+          await updateValue(value);
+        } else {
+          // Insert new entry
+          if (!item.ProcessorName) {
+            const processorName = await searchProcessorName(item.pname);
+            item.ProcessorName = processorName || null;
+          }
+          const sid = await searchProcessorSid(item.ProcessorName);
+          if (sid !== null) {
+            // If sid found, update ProcessorName with sid
+            item.ProcessorName = sid;
+          } else {
+            // If no sid found, set ProcessorName to null
+            item.ProcessorName = null;
+          }
+          const value = [
+            item.pname,
+            item.price,
+            item.image,
+            item.RAM || null,
+            item.ROM || null,
+            item.DisplaySize || null,
+            item.DisplayType || null,
+            item.Battery || null,
+            item.ProcessorName || null,
+            item.FrontCamera || null,
+            item.RearCamera || null,
+            item.nscore || null,
+            item.numberOfRatings || null
+          ];
+          await insertValue(value);
         }
       }
-      console.log('Data inserted into MySQL.');
-      console.log(`Number of phones scrapped: ${items.length}`);
-    } catch (error) {
-      console.error('Error inserting data into MySQL:', error);
-    } finally {
-      connection.end(); // Close the MySQL connection
     }
-  };
-  
-  const checkExistingEntry = (pname,price) => {
+    console.log('Data inserted into MySQL.');
+    console.log(`Number of phones scrapped: ${items.length}`);
+  } catch (error) {
+    console.error('Error inserting data into MySQL:', error);
+  } finally {
+    connection.end(); // Close the MySQL connection
+  }
+};
+
+const updateValue = (value) => {
+  return new Promise((resolve, reject) => {
+    connection.query('UPDATE phonedetails SET price = ?, image = ?, RAM = ?, ROM = ?, DisplaySize = ?, DisplayType = ?, Battery = ?, pid = ?, FrontCamera = ?, RearCamera = ?, userscore = ?, nusers = ? WHERE id = ?', value, (err, result) => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(result);
+      }
+    });
+  });
+};
+
+  const checkExistingEntry = (pname, ram, rom) => {
     return new Promise((resolve, reject) => {
-      connection.query('SELECT COUNT(*) AS count FROM phonedetails WHERE pname = ? and price = ? ', [pname,price], (err, result) => {
+      connection.query('SELECT id FROM phonedetails WHERE pname = ? AND (RAM = ? OR RAM IS NULL) AND (ROM = ? OR ROM IS NULL)', [pname, ram, rom], (err, result) => {
         if (err) {
           reject(err);
         } else {
-          resolve(result[0].count > 0);
+          if (result.length > 0) {
+            resolve(result[0].id);
+          } else {
+            resolve(null);
+          }
         }
       });
     });
   };
+  
   
   const insertValue = (value) => {
     return new Promise((resolve, reject) => {

@@ -1,0 +1,238 @@
+[
+    {
+        "input": "Show phones under 15k.",
+        "query": "SELECT phonedetails.*, soc.* FROM phonedetails JOIN soc ON phonedetails.pid = soc.sid WHERE phonedetails.price <= 15000 LIMIT 10;"
+    },
+    {
+        "input": "Find phones with 5000mAh+ battery.",
+        "query": "SELECT phonedetails.*, soc.* FROM phonedetails JOIN soc ON phonedetails.pid = soc.sid WHERE phonedetails.battery >= 5000 LIMIT 10;"
+    },
+    {
+        "input": "Recommend phones with great cameras.",
+        "query": " SELECT phonedetails.*, soc.* FROM phonedetails JOIN soc ON phonedetails.pid = soc.sid WHERE phonedetails.price BETWEEN 7000 AND 19000 and phonedetails.RearCamera is not null and phonedetails.FrontCamera is not null ORDER BY phonedetails.RearCamera, phonedetails.FrontCamera DESC LIMIT 10;"
+    },
+    {
+        "input": "show me smartphones with great performance and great storage in 30-50k range",
+        "query": " SELECT phonedetails.*, soc.* FROM phonedetails JOIN soc ON phonedetails.pid = soc.sid WHERE price BETWEEN 30000 AND 50000 ORDER BY perfscore DESC, ROM DESC LIMIT 10;"
+    },
+    {
+        "input": "phones great for gaming and has good cameras ",
+        "query": "SELECT phonedetails.*, soc.* FROM phonedetails JOIN soc ON phonedetails.pid = soc.sid ORDER BY perfscore DESC, RAM DESC, ROM DESC, FrontCamera DESC, RearCamera DESC LIMIT 10;"
+    },
+    {
+        "input": "Looking for phones with large storage.",
+        "query": "SELECT phonedetails.*, soc.* FROM phonedetails JOIN soc ON phonedetails.pid = soc.sid ORDER BY phonedetails.ROM DESC LIMIT 10;"
+    },
+    {
+        "input": "Show me phones under 20k with at least 6GB RAM.",
+        "query": "SELECT phonedetails.*, soc.* FROM phonedetails JOIN soc ON phonedetails.pid = soc.sid WHERE phonedetails.price <= 20000 AND phonedetails.RAM >= 6 LIMIT 10;"
+    },
+    {
+        "input": "Find phones with 128GB storage and 5000mAh+ battery.",
+        "query": "SELECT phonedetails.*, soc.* FROM phonedetails JOIN soc ON phonedetails.pid = soc.sid WHERE phonedetails.ROM = 128 AND phonedetails.battery >= 5000 LIMIT 10;"
+    },
+    {
+        "input": "Show me phones with Snapdragon processors.",
+        "query": "SELECT phonedetails.*, soc.* FROM phonedetails JOIN soc ON phonedetails.pid = soc.sid WHERE soc.ProcessorName LIKE '%Snapdragon%' LIMIT 10;"
+    },
+    {
+        "input": "Phones with 5G connectivity.",
+        "query": "SELECT phonedetails.*, soc.* FROM phonedetails JOIN soc ON phonedetails.pid = soc.sid WHERE phonedetails.pname LIKE '%5G%' LIMIT 10;"
+    },
+    {
+        "input": "Recommend phones with 6-inch or larger displays.",
+        "query": "SELECT phonedetails.*, soc.* FROM phonedetails JOIN soc ON phonedetails.pid = soc.sid WHERE phonedetails.DisplaySize >= 6 LIMIT 10;"
+    },
+    {
+        "input": "Show me phones with at least 128GB storage and 8GB RAM.",
+        "query": "SELECT phonedetails.*, soc.* FROM phonedetails JOIN soc ON phonedetails.pid = soc.sid WHERE phonedetails.ROM >= 128 AND phonedetails.RAM >= 8 LIMIT 10;"
+    },
+    {
+        "input": "Find phones with dual SIM support.",
+        "query": "SELECT phonedetails.*, soc.* FROM phonedetails JOIN soc ON phonedetails.pid = soc.sid WHERE phonedetails.pname LIKE '%Dual SIM%' LIMIT 10;"
+    },
+    {
+        "input": "Recommend phones with 5000mAh+ battery and IP68 water resistance.",
+        "query": "SELECT phonedetails.*, soc.* FROM phonedetails JOIN soc ON phonedetails.pid = soc.sid WHERE phonedetails.Battery >= 5000 AND phonedetails.pname LIKE '%IP68%' LIMIT 10;"
+    },
+    {
+        "input": "Show me phones with Android OS.",
+        "query": "SELECT phonedetails.*, soc.* FROM phonedetails JOIN soc ON phonedetails.pid = soc.sid WHERE phonedetails.pname LIKE '%Android%' LIMIT 10;"
+    },
+    {
+        "input": "Phones with 108MP or higher resolution cameras.",
+        "query": "SELECT phonedetails.*, soc.* FROM phonedetails JOIN soc ON phonedetails.pid = soc.sid WHERE phonedetails.RearCamera >= 108 LIMIT 10;"
+    },
+    {
+        "input": "Find phones with expandable storage options.",
+        "query": "SELECT phonedetails.*, soc.* FROM phonedetails JOIN soc ON phonedetails.pid = soc.sid WHERE phonedetails.pname LIKE '%expandable storage%' LIMIT 10;"
+    },
+    {
+        "input": "Recommend phones with 5G connectivity and Gorilla Glass protection.",
+        "query": "SELECT phonedetails.*, soc.* FROM phonedetails JOIN soc ON phonedetails.pid = soc.sid WHERE phonedetails.pname LIKE '%5G%' AND phonedetails.pname LIKE '%Gorilla Glass%' LIMIT 10;"
+    },
+    {
+        "input": "Show me phones with wireless charging support.",
+        "query": "SELECT phonedetails.*, soc.* FROM phonedetails JOIN soc ON phonedetails.pid = soc.sid WHERE phonedetails.pname LIKE '%wireless charging%' LIMIT 10;"
+    },
+    {
+        "input": "Phones with quad-camera setups.",
+        "query": "SELECT phonedetails.*, soc.* FROM phonedetails JOIN soc ON phonedetails.pid = soc.sid WHERE phonedetails.pname LIKE '%quad camera%' LIMIT 10;"
+    },
+    {
+        "input": "Recommend phones with stock Android experience.",
+        "query": "SELECT phonedetails.*, soc.* FROM phonedetails JOIN soc ON phonedetails.pid = soc.sid WHERE phonedetails.pname LIKE '%stock Android%' LIMIT 10;"
+    },
+    {
+        "input": "Show me phones with under-display fingerprint scanners.",
+        "query": "SELECT phonedetails.*, soc.* FROM phonedetails JOIN soc ON phonedetails.pid = soc.sid WHERE phonedetails.pname LIKE '%under-display fingerprint%' LIMIT 10;"
+    },
+    {
+        "input": "Find phones with at least 1000 users.",
+        "query": "SELECT phonedetails.*, soc.* FROM phonedetails JOIN soc ON phonedetails.pid = soc.sid WHERE phonedetails.nusers >= 1000 LIMIT 10;"
+    },
+    {
+        "input": "Show me phones with the highest number of users.",
+        "query": "SELECT phonedetails.*, soc.* FROM phonedetails JOIN soc ON phonedetails.pid = soc.sid ORDER BY phonedetails.nusers DESC LIMIT 10;"
+    },
+    {
+        "input": "Show me most famous phone amongst users",
+        "query": "SELECT phonedetails.*, soc.* FROM phonedetails JOIN soc ON phonedetails.pid = soc.sid ORDER BY phonedetails.nusers DESC LIMIT 10;"
+    },
+    {
+        "input": "Find phones with user scores greater than their performance scores.",
+        "query": "SELECT phonedetails.*, soc.* FROM phonedetails JOIN soc ON phonedetails.pid = soc.sid WHERE phonedetails.userscore > soc.perfscore LIMIT 10;"
+    },
+    {
+        "input": "Phones with high user scores and Snapdragon processors.",
+        "query": "SELECT phonedetails.*, soc.* FROM phonedetails JOIN soc ON phonedetails.pid = soc.sid WHERE soc.ProcessorName LIKE '%Snapdragon%' order by phonedetails.userscore desc LIMIT 10;"
+    },
+    {
+        "input": "Show me phones with user scores similar to their perfscores.",
+        "query": "SELECT phonedetails.*, soc.* FROM phonedetails JOIN soc ON phonedetails.pid = soc.sid WHERE ABS(phonedetails.userscore - soc.perfscore) < 5 LIMIT 10;"
+    },
+    {
+        "input": "Phones with a high number of users and 5G connectivity.",
+        "query": "SELECT phonedetails.*, soc.* FROM phonedetails JOIN soc ON phonedetails.pid = soc.sid WHERE phonedetails.pname LIKE '%5G%' order by phonedetails.nusers desc LIMIT 10;"
+    },
+    {
+        "input": "Show me phones with at least 8GB RAM.",
+        "query": "SELECT phonedetails.*, soc.* FROM phonedetails JOIN soc ON phonedetails.pid = soc.sid WHERE phonedetails.RAM >= 8 LIMIT 10;"
+    },
+    {
+        "input": "What are the top-rated phones under 30k?",
+        "query": "SELECT phonedetails.*, soc.* FROM phonedetails JOIN soc ON phonedetails.pid = soc.sid WHERE phonedetails.price < 30000 ORDER BY phonedetails.userscore DESC LIMIT 10;"
+    },
+    {
+        "input": "Find phones with Qualcomm processors and 6-inch displays.",
+        "query": "SELECT phonedetails.*, soc.* FROM phonedetails JOIN soc ON phonedetails.pid = soc.sid WHERE soc.ProcessorName LIKE '%Qualcomm%' AND phonedetails.DisplaySize = 6 LIMIT 10;"
+    },
+    {
+        "input": "List phones with rear cameras above 48MP.",
+        "query": "SELECT phonedetails.*, soc.* FROM phonedetails JOIN soc ON phonedetails.pid = soc.sid WHERE phonedetails.RearCamera > 48 LIMIT 10;"
+    },
+    {
+        "input": "Show me the most popular phones.",
+        "query": "SELECT phonedetails.*, soc.* FROM phonedetails JOIN soc ON phonedetails.pid = soc.sid ORDER BY phonedetails.nusers DESC LIMIT 10;"
+    },
+    {
+        "input": "Recommend phones with good performance and battery life.",
+        "query": "SELECT phonedetails.*, soc.* FROM phonedetails JOIN soc ON phonedetails.pid = soc.sid WHERE soc.perfscore >= 95 AND phonedetails.Battery >= 5000 ORDER BY soc.perfscore DESC, phonedetails.Battery DESC LIMIT 10;"
+    },
+    {
+        "input": "Find phones with at least 256GB storage and AMOLED displays.",
+        "query": "SELECT phonedetails.*, soc.* FROM phonedetails JOIN soc ON phonedetails.pid = soc.sid WHERE phonedetails.ROM >= 256 AND phonedetails.DisplayType LIKE '%AMOLED%' LIMIT 10;"
+    },
+    {
+        "input": "List affordable phones with good cameras.",
+        "query": "SELECT phonedetails.*, soc.* FROM phonedetails JOIN soc ON phonedetails.pid = soc.sid WHERE phonedetails.price BETWEEN 10000 AND 20000 AND phonedetails.RearCamera >= 48 AND phonedetails.FrontCamera >= 16 ORDER BY phonedetails.price ASC LIMIT 10;"
+    },
+    {
+        "input": "Show me 5 latest flagship phones.",
+        "query": "SELECT phonedetails.*, soc.* FROM phonedetails JOIN soc ON phonedetails.pid = soc.sid WHERE phonedetails.price > 50000 ORDER BY phonedetails.id DESC LIMIT 5;"
+    },
+    {
+        "input": "Find phones with at least 12GB RAM and Snapdragon processors.",
+        "query": "SELECT phonedetails.*, soc.* FROM phonedetails JOIN soc ON phonedetails.pid = soc.sid WHERE phonedetails.RAM >= 12 AND soc.ProcessorName LIKE '%Snapdragon%' LIMIT 10;"
+    },
+    {
+        "input": "List phones with large batteries and fast charging support.",
+        "query": "SELECT phonedetails.*, soc.* FROM phonedetails JOIN soc ON phonedetails.pid = soc.sid WHERE phonedetails.Battery >= 5000 AND phonedetails.pname LIKE '%Fast Charging%' LIMIT 10;"
+    },
+    {
+        "input": "Recommend mid-range phones with good cameras and performance.",
+        "query": "SELECT phonedetails.*, soc.* FROM phonedetails JOIN soc ON phonedetails.pid = soc.sid WHERE phonedetails.price BETWEEN 20000 AND 35000 AND soc.perfscore >= 90 AND phonedetails.RearCamera >= 48 AND phonedetails.FrontCamera >= 16 ORDER BY soc.perfscore DESC, phonedetails.RearCamera DESC, phonedetails.FrontCamera DESC LIMIT 10;"
+    },
+    {
+        "input": "Find phones with 5G support and large displays.",
+        "query": "SELECT phonedetails.*, soc.* FROM phonedetails JOIN soc ON phonedetails.pid = soc.sid WHERE phonedetails.pname LIKE '%5G%' AND phonedetails.DisplaySize >= 6 LIMIT 10;"
+    },
+    {
+        "input": "List phones with high refresh rate displays.",
+        "query": "SELECT phonedetails.*, soc.* FROM phonedetails JOIN soc ON phonedetails.pid = soc.sid WHERE phonedetails.DisplayType LIKE '%Hz%' LIMIT 10;"
+    },
+    {
+        "input": "Show me the most affordable phones with at least 4GB RAM.",
+        "query": "SELECT phonedetails.*, soc.* FROM phonedetails JOIN soc ON phonedetails.pid = soc.sid WHERE phonedetails.RAM >= 4 ORDER BY phonedetails.price ASC LIMIT 10;"
+    },
+    {
+        "input": "Recommend phones with good battery life and cameras for photography enthusiasts.",
+        "query": "SELECT phonedetails.*, soc.* FROM phonedetails JOIN soc ON phonedetails.pid = soc.sid WHERE phonedetails.Battery >= 4500 AND phonedetails.RearCamera >= 64 ORDER BY phonedetails.Battery DESC, phonedetails.RearCamera DESC LIMIT 10;"
+    },
+    {
+        "input": "Find phones with MediaTek processors and at least 128GB storage.",
+        "query": "SELECT phonedetails.*, soc.* FROM phonedetails JOIN soc ON phonedetails.pid = soc.sid WHERE soc.ProcessorName LIKE '%MediaTek%' AND phonedetails.ROM >= 128 LIMIT 10;"
+    },
+    {
+        "input": "List phones with wireless charging support.",
+        "query": "SELECT phonedetails.*, soc.* FROM phonedetails JOIN soc ON phonedetails.pid = soc.sid WHERE phonedetails.pname LIKE '%Wireless Charging%' LIMIT 10;"
+    },
+    {
+        "input": "Show me phones with dual cameras and at least 6GB RAM.",
+        "query": "SELECT phonedetails.*, soc.* FROM phonedetails JOIN soc ON phonedetails.pid = soc.sid WHERE phonedetails.RearCamera LIKE '%+%' AND phonedetails.RAM >= 6 LIMIT 10;"
+    },
+    {
+        "input": "Recommend phones with long battery life and good performance for gaming.",
+        "query": "SELECT phonedetails.*, soc.* FROM phonedetails JOIN soc ON phonedetails.pid = soc.sid WHERE phonedetails.Battery >= 5000 AND soc.perfscore >= 95 ORDER BY soc.perfscore DESC, phonedetails.Battery DESC LIMIT 10;"
+    },
+    {
+        "input": "Find phones with at least 16MP front cameras.",
+        "query": "SELECT phonedetails.*, soc.* FROM phonedetails JOIN soc ON phonedetails.pid = soc.sid WHERE phonedetails.FrontCamera >= 16 LIMIT 10;"
+    },
+    {
+        "input": "Show me the latest flagship phones from Apple.",
+        "query": "SELECT phonedetails.*, soc.* FROM phonedetails JOIN soc ON phonedetails.pid = soc.sid WHERE soc.ProcessorName LIKE '%Apple%' AND phonedetails.price > 50000 ORDER BY phonedetails.id DESC LIMIT 5;"
+    },
+    {
+        "input": "List phones with in-display fingerprint sensors.",
+        "query": "SELECT phonedetails.*, soc.* FROM phonedetails JOIN soc ON phonedetails.pid = soc.sid WHERE phonedetails.pname LIKE '%In-Display Fingerprint%' LIMIT 10;"
+    },
+    {
+        "input": "Recommend phones with good performance and large displays for media consumption.",
+        "query": "SELECT phonedetails., soc.* FROM phonedetails JOIN soc ON phonedetails.pid = soc.sid WHERE soc.perfscore >= 90 AND phonedetails.DisplaySize >= 6.5 ORDER BY soc.perfscore DESC, phonedetails.DisplaySize DESC LIMIT 10;"
+    },
+    {
+        "input": "Find phones with at least 12GB RAM and 256GB storage.",
+        "query": "SELECT phonedetails.*, soc.* FROM phonedetails JOIN soc ON phonedetails.pid = soc.sid WHERE phonedetails.RAM >= 12 AND phonedetails.ROM >= 256 LIMIT 10;"
+    },
+    {
+        "input": "Show me phones with IP68 water and dust resistance.",
+        "query": "SELECT phonedetails.*, soc.* FROM phonedetails JOIN soc ON phonedetails.pid = soc.sid WHERE phonedetails.pname LIKE '%IP68%' LIMIT 10;"
+    },
+    {
+        "input": "List affordable phones with good battery life for heavy users.",
+        "query": "SELECT phonedetails.*, soc.* FROM phonedetails JOIN soc ON phonedetails.pid = soc.sid WHERE phonedetails.price BETWEEN 15000 AND 25000 AND phonedetails.Battery >= 5000 ORDER BY phonedetails.Battery DESC LIMIT 10;"
+    },
+    {
+        "input": "Recommend phones with good low-light camera performance.",
+        "query": "SELECT phonedetails.*, soc.* FROM phonedetails JOIN soc ON phonedetails.pid = soc.sid WHERE phonedetails.pname LIKE '%Night Mode%' OR phonedetails.pname LIKE '%Low Light%' ORDER BY phonedetails.RearCamera DESC LIMIT 10;"
+    },
+    {
+        "input": "Find phones with at least 8GB RAM and 5G support.",
+        "query": "SELECT phonedetails.*, soc.* FROM phonedetails JOIN soc ON phonedetails.pid = soc.sid WHERE phonedetails.RAM >= 8 AND phonedetails.pname LIKE '%5G%' LIMIT 10;"
+    },
+    {
+        "input": "Show me the latest foldable phones.",
+        "query": "SELECT phonedetails.*, soc.* FROM phonedetails JOIN soc ON phonedetails.pid = soc.sid WHERE phonedetails.pname LIKE '%Fold%' OR phonedetails.pname LIKE '%Flip%' ORDER BY phonedetails.id DESC LIMIT 5;"
+    }
+]
