@@ -1,4 +1,5 @@
-server/node_modules
-server/.venv
-server/tmp
-server/frontend/node_modules
+project/server/node_modules
+project/server/.venv
+project/server/tmp
+project/server/api2.py
+project/frontend/node_modules
